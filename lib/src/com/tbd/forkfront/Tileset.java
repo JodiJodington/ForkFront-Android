@@ -15,9 +15,9 @@ import java.util.Map;
 
 public class Tileset
 {
-	public final int OVERLAY_DETECT = 0x04;
-	public final int OVERLAY_PET = 0x08;
-	public final int OVERLAY_OBJPILE = 0x40;
+	public final int OVERLAY_DETECT = 0x00008;
+	public final int OVERLAY_PET = 0x00010;
+	public final int OVERLAY_OBJPILE = 0x00080;
 
 	private static final String LOCAL_TILESET_NAME = "custom_tileset";
 
