@@ -15,9 +15,14 @@ import java.util.Map;
 
 public class Tileset
 {
-	public final int OVERLAY_DETECT = 0x00008;
-	public final int OVERLAY_PET = 0x00010;
-	public final int OVERLAY_OBJPILE = 0x00080;
+	public static final int OVERLAY_DETECT = 0x00008;
+	public static final int OVERLAY_PET = 0x00010;
+	public static final int OVERLAY_OBJPILE = 0x00080;
+    public static final int OVERLAY_BW_LAVA = 0x00100;
+    // yes these are supposed to be the same constants, they might be seperated later
+    public static final int OVERLAY_BW_ICE = 0x00200;
+    public static final int OVERLAY_BW_SINK = 0x00200;
+    public static final int OVERLAY_BW_ENGR = 0x00200;
 
 	private static final String LOCAL_TILESET_NAME = "custom_tileset";
 

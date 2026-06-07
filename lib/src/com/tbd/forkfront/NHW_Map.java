@@ -20,6 +20,8 @@ import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.tbd.forkfront.Tileset;
+
 public class NHW_Map implements NH_Window
 {
 	public static final int TileCols = 80;
@@ -785,7 +787,9 @@ public class NHW_Map implements NH_Window
 							fgColor = 0xffffffff;
 						}
 					}
-					else if(tile.overlay != 0 && tile.glyph >= 0)
+					else if(tile.glyph >= 0 && (tile.overlay &
+                            (Tileset.OVERLAY_OBJPILE | Tileset.OVERLAY_PET | Tileset.OVERLAY_DETECT | Tileset.OVERLAY_BW_LAVA |
+                             Tileset.OVERLAY_BW_ICE | Tileset.OVERLAY_BW_SINK | Tileset.OVERLAY_BW_SINK | Tileset.OVERLAY_BW_ENGR)) > 0)
 					{
 						bgColor = fgColor;
 						fgColor = 0xff000000;
