@@ -27,6 +27,7 @@ import android.preference.PreferenceManager;
 import android.view.*;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.MenuItem;
+import androidx.core.view.WindowCompat;
 import com.tbd.forkfront.Input.Modifier;
 
 import java.io.File;
@@ -80,6 +81,8 @@ public class ForkFront extends Activity
 		// takeKeyEvents(true);
 
 		setContentView(R.layout.mainwindow);
+
+		WindowCompat.enableEdgeToEdge(getWindow());
 
 		ensureReadWritePermissions(new RequestExternalStorageResult() {
 			@Override
