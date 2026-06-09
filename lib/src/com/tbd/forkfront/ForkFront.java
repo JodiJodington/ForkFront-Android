@@ -83,18 +83,7 @@ public class ForkFront extends Activity
 		setContentView(R.layout.mainwindow);
 
 		WindowCompat.enableEdgeToEdge(getWindow());
-
-		ensureReadWritePermissions(new RequestExternalStorageResult() {
-			@Override
-			public void onGranted() {
-				goodToGo();
-			}
-
-			@Override
-			public void onDenied() {
-				goodToGo();
-			}
-		});
+		goodToGo();
 	}
 
 	private void goodToGo() {
@@ -126,65 +115,6 @@ public class ForkFront extends Activity
 		}
 	}
 
-	@TargetApi(Build.VERSION_CODES.M)
-	public void ensureReadWritePermissions(final RequestExternalStorageResult requestExternalStorageResult)
-	{
-		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
-		{
-			if(checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED)
-			{
-				if(mRequestExternalStorageResult == null)
-				{
-					mRequestExternalStorageResult = requestExternalStorageResult;
-					requestPermissions(new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_EXTERNAL_STORAGE);
-				}
-				else
-				{
-					// Chain callbacks if several requests are activated in parallel. This shouldn't happen though.
-					final RequestExternalStorageResult prevRequest = mRequestExternalStorageResult;
-					mRequestExternalStorageResult = new RequestExternalStorageResult()
-					{
-						@Override
-						public void onGranted()
-						{
-							prevRequest.onGranted();
-							requestExternalStorageResult.onGranted();
-						}
-
-						@Override
-						public void onDenied()
-						{
-							prevRequest.onDenied();
-							requestExternalStorageResult.onDenied();
-						}
-					};
-				}
-			}
-			else
-			{
-				requestExternalStorageResult.onGranted();
-			}
-		}
-		else
-		{
-			requestExternalStorageResult.onGranted();
-		}
-	}
-
-	@Override
-	public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-		Log.print("onRequestPermissionsResult");
-		super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-		if(requestCode == REQUEST_EXTERNAL_STORAGE)
-		{
-			if(permissions.length == 1 && permissions[0].equals(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
-			&& grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-				mRequestExternalStorageResult.onGranted();
-			} else {
-				mRequestExternalStorageResult.onDenied();
-			}
-		}
-	}
 
 	// ____________________________________________________________________________________
 	@Override
