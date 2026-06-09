@@ -62,70 +62,70 @@ public class TilesetPreference extends Preference implements PreferenceManager.O
 
 		createChoices();
 
-		mTilesetUI = (ViewGroup)mRoot.findViewById(R.id.customTilesUI);
-		mTileW = (EditText)mRoot.findViewById(R.id.tileW);
-		mTileH = (EditText)mRoot.findViewById(R.id.tileH);
-		((RadioButton)mRoot.findViewById(R.id.custom_tiles)).setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
-		{
-			@Override
-			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
-			{
-				setCustomUIEnabled(isChecked);
-			}
-		});
-		mBrowse = (ImageButton)mRoot.findViewById(R.id.browse);
-		mBrowse.setOnClickListener(new View.OnClickListener()
-		{
-			@Override
-			public void onClick(View v)
-			{
-				choseCustomTilesetImage();
-			}
-		});
-		mTilesetPath = (TextView)mRoot.findViewById(R.id.image_path);
-
-		///////////////////////////////////////////////////////////////////////////////////////////////////////
-		// Workaround for weird focus problem
-		// When the keyboard is opened because an input field receive focus the entire view is recreated,
-		// which makes the field lose focus again
-		mTileW.setSelectAllOnFocus(true);
-		mTileH.setSelectAllOnFocus(true);
-
-		TextView.OnEditorActionListener onEditorActionListener = new TextView.OnEditorActionListener()
-		{
-			@Override
-			public boolean onEditorAction(TextView v, int actionId, KeyEvent event)
-			{
-				if(actionId == EditorInfo.IME_ACTION_DONE)
-				{
-					mTileWFocus = false;
-					mTileHFocus = false;
-				}
-				return false;
-			}
-		};
-		mTileW.setOnEditorActionListener(onEditorActionListener);
-		mTileH.setOnEditorActionListener(onEditorActionListener);
-
-		mTileW.setOnFocusChangeListener(new View.OnFocusChangeListener()
-		{
-			@Override
-			public void onFocusChange(View v, boolean hasFocus)
-			{
-				mTileWFocus = hasFocus;
-			}
-		});
-
-		mTileH.setOnFocusChangeListener(new View.OnFocusChangeListener()
-		{
-			@Override
-			public void onFocusChange(View v, boolean hasFocus)
-			{
-				mTileHFocus = hasFocus;
-			}
-		});
-		///////////////////////////////////////////////////////////////////////////////////////////////////////
-
+		//mTilesetUI = (ViewGroup)mRoot.findViewById(R.id.customTilesUI);
+		//mTileW = (EditText)mRoot.findViewById(R.id.tileW);
+		//mTileH = (EditText)mRoot.findViewById(R.id.tileH);
+		//((RadioButton)mRoot.findViewById(R.id.custom_tiles)).setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
+		//{
+			//@Override
+			//public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
+			//{
+				//setCustomUIEnabled(isChecked);
+			//}
+		//});
+		//mBrowse = (ImageButton)mRoot.findViewById(R.id.browse);
+		//mBrowse.setOnClickListener(new View.OnClickListener()
+		//{
+			//@Override
+			//public void onClick(View v)
+			//{
+				//choseCustomTilesetImage();
+			//}
+		//});
+		//mTilesetPath = (TextView)mRoot.findViewById(R.id.image_path);
+//
+		/////////////////////////////////////////////////////////////////////////////////////////////////////////
+		//// Workaround for weird focus problem
+		//// When the keyboard is opened because an input field receive focus the entire view is recreated,
+		//// which makes the field lose focus again
+		//mTileW.setSelectAllOnFocus(true);
+		//mTileH.setSelectAllOnFocus(true);
+//
+		//TextView.OnEditorActionListener onEditorActionListener = new TextView.OnEditorActionListener()
+		//{
+			//@Override
+			//public boolean onEditorAction(TextView v, int actionId, KeyEvent event)
+			//{
+				//if(actionId == EditorInfo.IME_ACTION_DONE)
+				//{
+					//mTileWFocus = false;
+					//mTileHFocus = false;
+				//}
+				//return false;
+			//}
+		//};
+		//mTileW.setOnEditorActionListener(onEditorActionListener);
+		//mTileH.setOnEditorActionListener(onEditorActionListener);
+//
+		//mTileW.setOnFocusChangeListener(new View.OnFocusChangeListener()
+		//{
+			//@Override
+			//public void onFocusChange(View v, boolean hasFocus)
+			//{
+				//mTileWFocus = hasFocus;
+			//}
+		//});
+//
+		//mTileH.setOnFocusChangeListener(new View.OnFocusChangeListener()
+		//{
+			//@Override
+			//public void onFocusChange(View v, boolean hasFocus)
+			//{
+				//mTileHFocus = hasFocus;
+			//}
+		//});
+		/////////////////////////////////////////////////////////////////////////////////////////////////////////
+//
 		return mRoot;
 	}
 

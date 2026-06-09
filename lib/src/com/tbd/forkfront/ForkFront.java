@@ -224,7 +224,7 @@ public class ForkFront extends Activity
 		Log.print(String.format("onOptionsItemSelected(item=%d)", item.getItemId()));
 		if(item.getItemId() == 1)
 		{
-			Intent prefsActivity = new Intent(getBaseContext(), Settings.class);
+			Intent prefsActivity = new Intent(getBaseContext(), SettingsActivity.class);
 			startActivityForResult(prefsActivity, SETTINGS_ACTIVITY_CODE);
 			return true;
 		}
@@ -301,7 +301,7 @@ public class ForkFront extends Activity
 				}
 				else if(mBackTracking && event.isLongPress())
 				{
-					Intent prefsActivity = new Intent(getBaseContext(), Settings.class);
+					Intent prefsActivity = new Intent(getBaseContext(), SettingsActivity.class);
 					startActivityForResult(prefsActivity, SETTINGS_ACTIVITY_CODE);
 					mBackTracking = false;
 				}

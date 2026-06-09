@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto">
+
+	<CheckBoxPreference
+		android:title="Always show in portrait"
+		android:summary="Always show the directional overlay in portrait mode"
+		android:persistent="true"
+		android:key="ovlPortAlways"
+		android:defaultValue="false"/>
+
+	<CheckBoxPreference
+		android:title="Always show in landscape"
+		android:summary="Always show the directional overlay in landscape mode"
+		android:persistent="true"
+		android:key="ovlLandAlways"
+		android:defaultValue="false"/>
+
+	<ListPreference
+		android:title="Portrait location"
+		android:summary="The location of the overlay in portrait mode"
+		android:persistent="true"
+		android:key="ovlPortLoc"
+		android:defaultValue="1"
+		android:entries="@array/dirLocationNames"
+		android:entryValues="@array/dirLocationValues"/>
+
+	<ListPreference
+		android:title="Landscape location"
+		android:summary="The location of the overlay in landscape mode"
+		android:persistent="true"
+		android:key="ovlLandLoc"
+		android:defaultValue="1"
+		android:entries="@array/dirLocationNames"
+		android:entryValues="@array/dirLocationValues"/>
+
+	<SeekBarPreference
+		android:title="Opacity"
+		android:summary="The opacity of the overlay"
+		android:persistent="true"
+		android:key="ovlOpacity"
+		android:dialogMessage="The opacity between invisible (0) and opaque (255)"
+		android:defaultValue="255"
+		android:text=""
+		android:max="255"/>
+
+	<SeekBarPreference
+			android:title="Size"
+			android:summary="The relative size of the overlay"
+			android:persistent="true"
+			android:key="ovlSize"
+			android:dialogMessage="Change the relative size of the overlay buttons"
+			android:defaultValue="0"
+			android:text=""
+			android:min="-10"
+			android:max="10"/>
+
+	<CheckBoxPreference
+		android:title="Allow map input with overlay"
+		android:summary="Allow directional input by clicking on the map when the overlay is shown"
+		android:persistent="true"
+		android:key="allowMapDir"
+		android:defaultValue="false"/>
+</PreferenceScreen>

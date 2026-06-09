@@ -9,10 +9,10 @@ import android.preference.PreferenceManager;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
-import android.widget.TextView;
+import androidx.appcompat.widget.AppCompatTextView;
 
 // Used instead of TextView for monospace mode support
-public class NH_TextView extends TextView {
+public class NH_TextView extends AppCompatTextView {
 
 	private static final float MAX_SIZE_SP = 20;
 	private static float DISPLAY_WIDTH_PX;

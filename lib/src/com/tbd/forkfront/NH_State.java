@@ -513,7 +513,7 @@ public class NH_State
 	// ____________________________________________________________________________________
 	public void startPreferences()
 	{
-		Intent prefsActivity = new Intent(mContext.getBaseContext(), Settings.class);
+		Intent prefsActivity = new Intent(mContext.getBaseContext(), SettingsActivity.class);
 		mContext.startActivityForResult(prefsActivity, 42);
 	}
 
