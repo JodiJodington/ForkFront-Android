@@ -82,7 +82,6 @@ public class ForkFront extends Activity
 
 		setContentView(R.layout.mainwindow);
 
-		WindowCompat.enableEdgeToEdge(getWindow());
 		goodToGo();
 	}
 
