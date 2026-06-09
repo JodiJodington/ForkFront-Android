@@ -92,7 +92,7 @@ public class ForkFront extends Activity
 
 			@Override
 			public void onDenied() {
-				finish();
+				goodToGo();
 			}
 		});
 	}
