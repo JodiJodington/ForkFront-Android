@@ -296,7 +296,7 @@ public class NetHackIO
 	// ____________________________________________________________________________________
 	public void sendSelectNoneCmd()
 	{
-		mCmdQue.add(new SelectCmd(0, 0));
+		mCmdQue.add(new SelectCmd(new ArrayList<MenuItem>()));
 	}
 
 	// ____________________________________________________________________________________

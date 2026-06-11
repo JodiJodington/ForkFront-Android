@@ -65,8 +65,6 @@ public class MenuItem
 		setAcc(mAccelerator);
 
 		mCount = selected > 0 ? -1 : 0;
-		mMaxCount = 0;
-		
 		int i;
 		for(i = 0; i < mName.length(); i++)
 		{
@@ -193,7 +191,13 @@ public class MenuItem
 	// ____________________________________________________________________________________
 	public boolean isSelectable()
 	{
-		return mIdent != 0;
+        boolean selectable = mIdent != 0;
+        if (selectable) {
+            Log.print(mText + " is selectable!");
+        } else {
+            Log.print(mText + " is selectable!");
+        }
+        return selectable;
 	}
 
 	public void setView(View view)

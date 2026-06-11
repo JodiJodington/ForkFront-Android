@@ -582,8 +582,10 @@ public class NH_State
 		@Override
 		public void askName(int nMaxChars, String[] saves) {
 			String last = getLastUsername();
+            Log.print("last: " + last);
 			List<String> list = new ArrayList<>();
 			for(String s : saves) {
+                Log.print("save: " + s);
 				if(last.equals(s))
 					list.add(0, s);
 				else

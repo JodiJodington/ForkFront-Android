@@ -758,14 +758,17 @@ public class NHW_Menu implements NH_Window
 					switch(mHow)
 					{
 					case PickNone:
+                        Log.print("PickNone");
 						sendSelectNone();
 					break;
 					case PickOne:
+                        Log.print("PickOne");
 						MenuItem item = mItems.get(position);
 						if(!item.isHeader() && item.isSelectable())
 							sendSelectOne(item, mKeyboardCount);
 					break;
 					case PickMany:
+                        Log.print("PickMany");
 						toggleItemOrGroupAt(position);
 					break;
 					}
