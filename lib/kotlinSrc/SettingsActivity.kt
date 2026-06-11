@@ -2,6 +2,7 @@ package com.tbd.forkfront
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.compose.BackHandler
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.unit.dp
@@ -33,7 +34,9 @@ public class SettingsActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            Settings()
+            Settings {
+                finish()
+            }
         }
     }
 }
@@ -44,9 +47,19 @@ enum class SettingsPage {
 }
 
 @Composable
-fun Settings() {
+fun Settings(exitCallback: () -> Unit) {
     val page = remember { mutableStateOf(SettingsPage.main) }
     val callback = { newPage: SettingsPage -> page.value = newPage }
+
+    BackHandler(
+        onBack = {
+            when (page.value) {
+                SettingsPage.main -> exitCallback()
+                else -> page.value = SettingsPage.main
+            }
+        }
+    )
+
     when (page.value) {
         SettingsPage.main -> SettingsMainPage(callback)
         SettingsPage.tileset -> SettingsTilesetPage(callback)
