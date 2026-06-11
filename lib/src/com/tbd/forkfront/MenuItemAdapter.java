@@ -49,6 +49,11 @@ public class MenuItemAdapter extends ArrayAdapter<MenuItem>
 		return false;
 	}
 
+    @Override
+    public boolean isEnabled(int position) {
+        return mHow != MenuSelectMode.PickNone && mItems.get(position).isSelectable();
+    }
+
 	// ____________________________________________________________________________________
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent)
@@ -131,7 +136,7 @@ public class MenuItemAdapter extends ArrayAdapter<MenuItem>
 			}
 
 			CheckBox cb = (CheckBox)v.findViewById(R.id.item_check);
-			if(mHow == MenuSelectMode.PickMany && !item.isHeader())
+			if(mHow == MenuSelectMode.PickMany && !item.isHeader() && item.isSelectable())
 			{
 				cb.setVisibility(View.VISIBLE);
 				cb.setChecked(item.isSelected());
