@@ -14,6 +14,7 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.res.stringArrayResource
@@ -48,18 +49,25 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.State
+import androidx.lifecycle.viewmodel.MutableCreationExtras
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 
 
 public class SettingsActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+
         setContent {
 			Box(
 				modifier = Modifier.background(color = MaterialTheme.colorScheme.background)
 			) {
-				Settings {
-					finish()
-				}
+				SettingsScreen (
+					exitCallback = {
+						finish()
+					}
+				) 
 			}
         }
     }
@@ -76,7 +84,15 @@ enum class SettingsPage {
 }
 
 @Composable
-fun Settings(exitCallback: () -> Unit) {
+fun SettingsScreen(
+	exitCallback: () -> Unit
+) {
+	val settingsViewModel: SettingsViewModel = viewModel(
+		extras = MutableCreationExtras().apply {
+			set(SettingsViewModel.CONTEXT_KEY, LocalContext.current)
+		},
+		factory = SettingsViewModel.Factory
+	)
     val page = remember { mutableStateOf(SettingsPage.main) }
     val scrollState = rememberScrollState();
 
@@ -102,20 +118,48 @@ fun Settings(exitCallback: () -> Unit) {
         }
         when (page.value) {
             SettingsPage.main -> SettingsMainPage(
-                newPageCallback = callback
+                newPageCallback = callback,
+				settingsViewModel = settingsViewModel
             )
-            SettingsPage.tileset -> SettingsTilesetPage()
-            SettingsPage.directional_overlay -> SettingsDirectionalOverlayPage()
-            SettingsPage.command_panels -> SettingsCommandPanelPage()
-            SettingsPage.hearse -> SettingsHearsePage()
-            SettingsPage.edit_options_file -> SettingsEditOptionsFilePage(callback)
+            SettingsPage.tileset -> SettingsTilesetPage(
+				newPageCallback = callback,
+				settingsViewModel = settingsViewModel
+			)
+            SettingsPage.directional_overlay -> SettingsDirectionalOverlayPage(
+				newPageCallback = callback,
+				settingsViewModel = settingsViewModel
+			)
+            SettingsPage.command_panels -> SettingsCommandPanelPage(
+				newPageCallback = callback,
+				settingsViewModel = settingsViewModel
+			)
+            SettingsPage.hearse -> SettingsHearsePage(
+				newPageCallback = callback,
+				settingsViewModel = settingsViewModel
+			)
+			SettingsPage.edit_options_file -> SettingsEditOptionsFilePage(
+				newPageCallback = callback,
+				settingsViewModel = settingsViewModel
+			)
             SettingsPage.credits -> SettingsCreditPage()
         }
     }
 }
 
 @Composable
-fun SettingsMainPage(newPageCallback: (SettingsPage) -> Unit) {
+fun SettingsMainPage(
+	newPageCallback: (SettingsPage) -> Unit,
+	settingsViewModel: SettingsViewModel,
+) {
+	val fullscreen = settingsViewModel.fullscreen.collectAsStateWithLifecycle(initialValue = false)
+	val immersiveMode = settingsViewModel.immersiveMode.collectAsStateWithLifecycle(initialValue = false)
+	val volumeDownAction = settingsViewModel.volumeDownAction.collectAsStateWithLifecycle(initialValue = "0")
+	val volumeUpAction = settingsViewModel.volumeUpAction.collectAsStateWithLifecycle(initialValue = "0")
+	val lockView = settingsViewModel.lockView.collectAsStateWithLifecycle(initialValue = false)
+	val monospaceMode = settingsViewModel.monospaceMode.collectAsStateWithLifecycle(initialValue = false)
+	val statusBackgroundOpacity = settingsViewModel.statusBackgroundOpacity.collectAsStateWithLifecycle(initialValue = 0)
+	val mapBorderOpacity = settingsViewModel.mapBorderOpacity.collectAsStateWithLifecycle(initialValue = 255)
+	val fallbackRenderer = settingsViewModel.fallbackRenderer.collectAsStateWithLifecycle(initialValue = false)
     SettingsCategory("Main")
     SettingsChangePage(
         title = "Tileset",
@@ -126,55 +170,69 @@ fun SettingsMainPage(newPageCallback: (SettingsPage) -> Unit) {
     SettingsSwitch(
         title = "Fullscreen",
         description = "Enable fullscreen mode",
-        checked = false,
-        callback = {}
+        checked = fullscreen.value,
+        callback = { newValue ->
+			settingsViewModel.updateFullscreen(newValue)
+		}
     )
     SettingsSwitch(
         title = "Immersive mode",
         description = "Hide the on-screen navigation bar",
-        checked = false,
-        callback = {}
+        checked = immersiveMode.value,
+        callback = { newValue ->
+			settingsViewModel.updateImmersiveMode(newValue)
+		}
     )
     SettingsSelectDialog(
         title = "Volume down action",
         description = "The action performed when pressing the volume down key",
         itemNames = stringArrayResource(R.array.actionNames),
         itemValues = stringArrayResource(R.array.actionValues),
-        selected = "0",
-        callback = {}
+        selected = volumeDownAction.value,
+        callback = { newValue ->
+			settingsViewModel.updateVolumeDownAction(newValue)
+		}
     )
     SettingsSelectDialog(
         title = "Volume up action",
         description = "The action performed when pressing the volume up key",
         itemNames = stringArrayResource(R.array.actionNames),
         itemValues = stringArrayResource(R.array.actionValues),
-        selected = "0",
-        callback = {}
+        selected = volumeUpAction.value,
+		callback = { newValue ->
+			settingsViewModel.updateVolumeUpAction(newValue)
+		}
     )
     SettingsSwitch(
         title = "Lock view",
         description = "Do not move the view with the character whent he entire map can fit the screen",
-        checked = false,
-        callback = {}
+        checked = lockView.value,
+        callback = { newValue ->
+			settingsViewModel.updateLockView(newValue)
+		}
     )
     SettingsSwitch(
         title = "Monospace mode",
         description = "Use a monospace font for nicer typography",
-        checked = false,
-        callback = {}
+        checked = monospaceMode.value,
+        callback = { newValue ->
+			settingsViewModel.updateMonospaceMode(newValue)
+		}
     )
     SettingsSlider(
         title = "Status background opacity",
         description = "The background opacity of the status lines",
-        range = 0f..255f,
-        start = 0f,
-        callback = {}
+        range = 0..255,
+        start = statusBackgroundOpacity.value,
+        callback = { newValue ->
+			settingsViewModel.updateStatusBackgroundOpacity(newValue)
+		}
     )
     SettingsSlider(
         title = "Map border opacity",
         description = "The opacity of the border around the map",
-        range = 0f..255f,
-        start = 50f,
+        range = 0..255,
+        start = mapBorderOpacity.value,
         callback = {}
     )
     SettingsChangePage(
@@ -210,8 +268,10 @@ fun SettingsMainPage(newPageCallback: (SettingsPage) -> Unit) {
     SettingsSwitch(
         title = "Use fallback renderer",
         description = "Check this if you experience rendering problems",
-        checked = false,
-        callback = {}
+        checked = fallbackRenderer.value,
+        callback = {newValue ->
+			settingsViewModel.updateFallbackRenderer(newValue)
+		}
     )
     SettingsCategory("About")
     SettingsChangePage(
@@ -223,12 +283,17 @@ fun SettingsMainPage(newPageCallback: (SettingsPage) -> Unit) {
 }
 
 @Composable
-fun SettingsTilesetPage() {
+fun SettingsTilesetPage(
+	newPageCallback: (SettingsPage) -> Unit,
+	settingsViewModel: SettingsViewModel,
+) {
     val scrollState = rememberScrollState();
-    val selectedOption = remember { mutableStateOf("TTY") }
+    val tileset = settingsViewModel.tileset.collectAsStateWithLifecycle(initialValue = "TTY")
+	val customTileW = settingsViewModel.customTileW.collectAsStateWithLifecycle(initialValue = 32)
+	val customTileH = settingsViewModel.customTileH.collectAsStateWithLifecycle(initialValue = 32)
 
     val names = stringArrayResource(R.array.tileNames) + arrayOf("custom")
-    val values = stringArrayResource(R.array.tileNames) + arrayOf("custom")
+    val values = stringArrayResource(R.array.tileValues) + arrayOf("custom")
     if (names.size != values.size) throw IllegalArgumentException("tileNames and tileValues must be of equal length")
 	names.indices.forEach {i ->
 		val name = names[i]
@@ -237,9 +302,9 @@ fun SettingsTilesetPage() {
 			modifier = Modifier.fillMaxWidth()
 		) {
 			RadioButton(
-				selected = value == selectedOption.value,
+				selected = value == tileset.value,
 				onClick = {
-					selectedOption.value = value
+					settingsViewModel.updateTileset(value)
 				}
 			)
 			Text(
@@ -249,7 +314,7 @@ fun SettingsTilesetPage() {
 			)
 		}
 	}
-	val customEnabled = selectedOption.value == "custom"
+	val customEnabled = tileset.value == "custom"
 	Row {
 		Text(
 			"Tileset image:",
@@ -262,17 +327,28 @@ fun SettingsTilesetPage() {
 		EnterSize(
 			"width:",
 			modifier = Modifier.weight(1f),
-			enabled = customEnabled
+			enabled = customEnabled,
+			start = customTileW.value,
+			callback = { newValue ->
+				settingsViewModel.updateCustomTileW(newValue)
+			}
 		)
 		EnterSize(
 			"height:",
 			modifier = Modifier.weight(1f),
-			enabled = customEnabled
+			enabled = customEnabled,
+			start = customTileH.value,
+			callback = { newValue ->
+				settingsViewModel.updateCustomTileH(newValue)
+			}
 		)
 	}
 }
 @Composable
-fun SettingsDirectionalOverlayPage() {
+fun SettingsDirectionalOverlayPage(
+	newPageCallback: (SettingsPage) -> Unit,
+	settingsViewModel: SettingsViewModel,
+) {
     SettingsSwitch(
         title = "Always show in portrait",
         description = "Always show the directional overlay in portrait mode",
@@ -304,15 +380,15 @@ fun SettingsDirectionalOverlayPage() {
     SettingsSlider(
         title = "Opacity",
         description = "The opacity of the overlay",
-        range = 0f..255f,
-        start = 255f,
+        range = 0..255,
+        start = 255,
         callback = {},
     )
     SettingsSlider(
         title = "Size",
         description = "The relative size of the overlay",
-        range = -10f..10f,
-        start = 0f,
+        range = -10..10,
+        start = 0,
         callback = {}
     )
     SettingsSwitch(
@@ -324,7 +400,11 @@ fun SettingsDirectionalOverlayPage() {
 }
 
 @Composable
-fun SettingsCommandPanelPage(page: Int = 0) {
+fun SettingsCommandPanelPage(
+	page: Int = 0,
+	newPageCallback: (SettingsPage) -> Unit,
+	settingsViewModel: SettingsViewModel,
+) {
     val page = remember { mutableStateOf(page) }
     BackHandler(
         enabled = page.value != 0,
@@ -388,15 +468,15 @@ fun SettingsCommandPanelPage(page: Int = 0) {
             SettingsSlider(
                 title = "Opacity",
                 description = "The opacity of the panel",
-                range = 0f..255f,
-                start = 255f,
+                range = 0..255,
+                start = 255,
                 callback = {}
             )
             SettingsSlider(
                 title = "Size",
                 description = "The relative size of the panel",
-                range = -10f..10f,
-                start = 0f,
+                range = -10..10,
+                start = 0,
                 callback = {}
             )
         }
@@ -404,7 +484,10 @@ fun SettingsCommandPanelPage(page: Int = 0) {
 }
 
 @Composable
-fun SettingsHearsePage() {
+fun SettingsHearsePage(
+	newPageCallback: (SettingsPage) -> Unit,
+	settingsViewModel: SettingsViewModel,
+) {
     SettingsSwitch(
         title = "Enable hearse",
         description = "Bones sharing. Don't use Hearse with Wizard Mode bones",
@@ -440,7 +523,10 @@ fun SettingsHearsePage() {
 }
 
 @Composable
-fun SettingsEditOptionsFilePage(newPageCallback: (SettingsPage) -> Unit) {
+fun SettingsEditOptionsFilePage(
+	newPageCallback: (SettingsPage) -> Unit,
+	settingsViewModel: SettingsViewModel,
+) {
 	val textStateField = rememberTextFieldState()
 	TextField(
 		state = textStateField,
@@ -480,11 +566,10 @@ fun SettingsCreditPage() {
 fun SettingsSlider(
     title: String,
     description: String,
-    range: ClosedFloatingPointRange<Float>,
-    start: Float,
-    callback: (Float) -> Unit
+    range: IntRange,
+    start: Int,
+    callback: (Int) -> Unit
 ) {
-	val sliderPosition = remember { mutableStateOf(start) }
 	Row(
 		horizontalArrangement = Arrangement.SpaceBetween
 	) {
@@ -494,22 +579,21 @@ fun SettingsSlider(
 			Text(title, style = MaterialTheme.typography.titleMedium)
 			Text(description, style = MaterialTheme.typography.bodySmall)
 		}
-		Text(sliderPosition.value.toInt().toString(), style = MaterialTheme.typography.headlineLarge)
+		Text(start.toString(), style = MaterialTheme.typography.headlineLarge)
 	}
-	Row {
-		Text(range.start.toInt().toString(), style = MaterialTheme.typography.headlineMedium)
+	Row(
+		horizontalArrangement = Arrangement.spacedBy(5.dp),
+	) {
+		Text(range.start.toString(), style = MaterialTheme.typography.headlineMedium)
 		Slider(
 			modifier = Modifier.weight(1f),
-			value = sliderPosition.value,
-			valueRange = range,
-			onValueChangeFinished = {
-				callback(sliderPosition.value)
-			},
+			value = start.toFloat(),
+			valueRange = range.first.toFloat()..range.last.toFloat(),
 			onValueChange = { newValue ->
-				sliderPosition.value = newValue
+				callback(newValue.toInt())
 			}
 		)
-		Text(range.endInclusive.toInt().toString(), style = MaterialTheme.typography.headlineMedium)
+		Text(range.endInclusive.toString(), style = MaterialTheme.typography.headlineMedium)
 	}
 }
 
@@ -561,7 +645,6 @@ fun SettingsSelectDialog(
     if (itemNames.size != itemValues.size) throw IllegalArgumentException("itemName and itemValues must be the same size")
 
     val openDialog = remember { mutableStateOf(false) }
-    val selected = remember { mutableStateOf(selected) } 
 
     SettingsButton(
         title = title,
@@ -590,12 +673,12 @@ fun SettingsSelectDialog(
 						modifier = Modifier.clickable(
 							role = Role.RadioButton,
 							onClick = {
-								selected.value = value
+								callback(value)
 							}
 						)
 					) {
                         RadioButton(
-                            selected = selected.value == value,
+							selected = selected == value,
 							onClick = null,
                         )
                         Text(
@@ -611,7 +694,7 @@ fun SettingsSelectDialog(
                     Button(
                         onClick = {
                             openDialog.value = false
-                            callback(selected.value)
+                            callback(selected)
                         }
                     ) {
                         Text(
@@ -695,14 +778,23 @@ fun SettingsTextFieldDialog(title: String, description: String, callback: (Strin
 }
 
 @Composable
-fun EnterSize(label: String, enabled: Boolean, modifier: Modifier = Modifier) {
-    val textStateField = rememberTextFieldState()
+fun EnterSize(
+	label: String,
+	enabled: Boolean,
+	start: Int,
+	modifier: Modifier = Modifier,
+	callback: (Int) -> Unit
+) {
+    val textStateField = rememberTextFieldState(start.toString())
     TextField(
-		state = textStateField,
+		value = start.toString(),
+		onValueChange = { newValue ->
+			callback(newValue.toInt())
+		},
 		keyboardOptions = KeyboardOptions(
 			keyboardType = KeyboardType.Number,
 		),
-		lineLimits = TextFieldLineLimits.SingleLine,
+		maxLines = 1,
 		textStyle = MaterialTheme.typography.headlineLarge,
 		modifier = modifier,
         enabled = enabled,
@@ -725,14 +817,13 @@ fun SettingsChangePage(title: String, description: String, page: SettingsPage, c
 
 @Composable
 fun SettingsSwitch(title: String, description: String, checked: Boolean, callback: (Boolean) -> Unit) {
-	val checked = remember { mutableStateOf(checked) }
 	Row(
 		horizontalArrangement = Arrangement.SpaceBetween,
 		modifier = Modifier
 		.clickable(
 			role = Role.Switch,
 			onClick = {
-				checked.value = !checked.value
+				callback(!checked)
 			}
 		)
 		.fillMaxWidth()
@@ -751,7 +842,7 @@ fun SettingsSwitch(title: String, description: String, checked: Boolean, callbac
 
 		}
 		Switch(
-			checked = checked.value,
+			checked = checked,
 			onCheckedChange = null,
         )
     }
