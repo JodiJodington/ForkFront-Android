@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.UUID
 
 import android.app.Activity;
 import android.os.Environment;
@@ -890,6 +891,10 @@ public class NetHackIO
 			path = file.getAbsolutePath();
 		} catch(Exception e) {}
 		return path;
+	}
+	@SuppressWarnings("unused")
+	private String getUUID() {
+		return UUID.randomUUID().toString();
 	}
 
 	// ____________________________________________________________________________________
