@@ -8,4 +8,5 @@ public class KeyAction
 	public static final int Keyboard = -3;
 	public static final int Control = -4;
 	public static final int Meta = -5;
+	public static final int RecenterCharacter = -6;
 }

@@ -233,7 +233,9 @@ public class NHW_Map implements NH_Window
 
 		centerView(tileX, tileY);
 	}
-
+	public void centerViewAroundPlayer() {
+		centerView(mPlayerPos.x, mPlayerPos.y);
+	}
 	// ____________________________________________________________________________________
 	public void centerView(final int tileX, final int tileY)
 	{

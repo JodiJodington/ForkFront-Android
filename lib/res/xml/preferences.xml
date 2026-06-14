@@ -50,6 +50,15 @@
 			android:entryValues="@array/actionValues"/>
 
 		<ListPreference
+			android:title="Back press action"
+			android:summary="The action performed when pressing the back navigation button on the main screen and when no dialog is active"
+			android:persistent="true"
+			android:key="backAction"
+			android:defaultValue="0"
+			android:entries="@array/backActionNames"
+			android:entryValues="@array/backActionValues"/>
+
+		<ListPreference
 			android:title="Travel command"
 			android:summary="When to invoke the Travel command if a position is clicked"
 			android:persistent="true"

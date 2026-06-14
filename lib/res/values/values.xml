@@ -20,6 +20,15 @@
 		<item>111</item>
 	</string-array>
 
+	<string-array name="backActionNames">
+		<item>Save and exit</item>
+		<item>Re-center map</item>
+	</string-array>
+	<string-array name="backActionValues">
+		<item>0</item>
+		<item>-6</item>
+	</string-array>
+
 	<string-array name="dirLocationNames">
 		<item>Left</item>
 		<item>Center</item>

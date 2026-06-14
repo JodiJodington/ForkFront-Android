@@ -122,6 +122,11 @@ public class Input
 		int action;
 		switch(keyCode)
 		{
+		case KeyEvent.KEYCODE_BACK:
+			action = Util.parseInt(prefs.getString("backAction", ""), KeyAction.SystemDefault);
+			if(action == KeyAction.SystemDefault)
+				action = keyCode;
+		break;
 		case KeyEvent.KEYCODE_VOLUME_UP:
 			action = Util.parseInt(prefs.getString("volup", ""), KeyAction.SystemDefault);
 			if(action == KeyAction.SystemDefault)

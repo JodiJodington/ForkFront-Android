@@ -235,6 +235,10 @@ public class NH_State
 			toggleKeyboard();
 			return true;
 		}
+		else if (keyCode == KeyAction.RecenterCharacter) {
+			mMap.centerViewAroundPlayer();
+			return true;
+		}
 		else if(keyCode == KeyAction.Control || keyCode == KeyAction.Meta)
 		{
 			if(!Util.hasPhysicalKeyboard(mContext))
