@@ -250,6 +250,21 @@ public class NH_State
 			}
 			return true;
 		}
+		if(keyCode == KeyEvent.KEYCODE_BACK) {
+			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mContext);
+			int action = Util.parseInt(prefs.getString("backAction", ""), KeyAction.SystemDefault);
+			switch (action) {
+				case KeyAction.SystemDefault:
+					break;
+				case KeyAction.RecenterCharacter:
+					if (mMap.isViewPanned()) {
+						mMap.centerViewAroundPlayer();
+						return true;
+					}
+				default:
+					Log.print("warning: illegal backAction setting!");
+			}
+		}
 		if(DEBUG.runTrace() && keyCode == KeyEvent.KEYCODE_BACK)
 			Debug.stopMethodTracing();
 		return sendKeyCmd(nhKey);

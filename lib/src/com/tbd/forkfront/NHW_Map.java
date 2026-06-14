@@ -233,7 +233,13 @@ public class NHW_Map implements NH_Window
 
 		centerView(tileX, tileY);
 	}
-
+	public boolean isViewPanned() {
+		return mUI.mIsViewPanned;
+	}
+	public void centerViewAroundPlayer() {
+		centerView(mPlayerPos.x, mPlayerPos.y);
+		mUI.mIsViewPanned = false;
+	}
 	// ____________________________________________________________________________________
 	public void centerView(final int tileX, final int tileY)
 	{
