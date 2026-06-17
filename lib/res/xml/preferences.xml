@@ -707,6 +707,17 @@
 
 	</PreferenceCategory>
 
+	<PreferenceCategory android:title="Export/Import">
+		<com.tbd.forkfront.ExportPreferences
+			android:title="Export"
+			android:key="exportPreferences"
+			android:summary="export a settings.json file based on the current settings"/>
+		<com.tbd.forkfront.ImportPreferences
+			android:title="Import"
+			android:key="importPreferences"
+			android:summary="import a settings.json file and set your settings accordingly. Only settings explicitly defined in the file will be overriden, others will remain untouched."/>
+	</PreferenceCategory>
+
 	<PreferenceCategory
 		android:title="About">
 

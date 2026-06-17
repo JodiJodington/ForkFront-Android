@@ -15,7 +15,8 @@ import com.tbd.forkfront.TilesetPreference;
 public class Settings extends PreferenceActivity implements OnSharedPreferenceChangeListener
 {
 	private TilesetPreference mTilesetPref;
-
+	private ExportPreferences mExportPreferences;
+	private ImportPreferences mImportPreferences;
 	// ____________________________________________________________________________________
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -53,6 +54,10 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 
 		mTilesetPref = (TilesetPreference)findPreference("tilesetPreference");
 		mTilesetPref.setActivity(this);
+		mExportPreferences = (ExportPreferences)findPreference("exportPreferences");
+		mExportPreferences.setActivity(this);
+		mImportPreferences = (ImportPreferences)findPreference("importPreferences");
+		mImportPreferences.setActivity(this);
 
 		if(!getApplicationContext().getResources().getBoolean(R.bool.hearseAvailable))
 		{
@@ -77,7 +82,9 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 	protected void onActivityResult(int requestCode, int resultCode, Intent data)
 	{
 		super.onActivityResult(requestCode, resultCode, data);
-		mTilesetPref.onActivityResult(requestCode, resultCode, data);
+		if (mTilesetPref.onActivityResult(requestCode, resultCode, data)) return;
+		if (mExportPreferences.onActivityResult(requestCode, resultCode, data)) return;
+		if (mImportPreferences.onActivityResult(requestCode, resultCode, data)) return;
 	}
 
 	// ____________________________________________________________________________________
