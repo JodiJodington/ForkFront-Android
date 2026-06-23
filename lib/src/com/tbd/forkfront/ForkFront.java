@@ -27,7 +27,6 @@ import android.preference.PreferenceManager;
 import android.view.*;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.MenuItem;
-import androidx.core.view.WindowCompat;
 import com.tbd.forkfront.Input.Modifier;
 
 import java.io.File;
